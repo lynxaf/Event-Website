@@ -1,0 +1,577 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+
+/* =============================
+   1. CSS Variables (:root)
+   ============================= */
+:root {
+  --font-primary: "Poppins", sans-serif;
+  
+  /* Brand Colors */
+  --navy-dark: #151A26;
+  --navy-light: #252837;
+  --navy-hover: #1a1d29;
+  --green: #01FB34;
+  --white: #FFFFFF;
+  --grey: #A3A5AA;
+  --bg-light: #F5F7F9;
+  --primary: #667eea;
+  --primary-hover: #5568d3;
+  
+  /* Gradient Colors (Berdasarkan nilai yang dipertahankan) */
+  --grad-blue-start: #3069EE;
+  --grad-blue-end: #3DCEf5;
+  --grad-pink-start: #EE4577;
+  --grad-pink-end: #F5709D;
+}
+
+/* =============================
+   2. Global Styles
+   ============================= */
+* {
+  font-family: var(--font-primary);
+}
+
+body {
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-hover);
+}
+
+/* Utility Classes */
+.bg-navy { background-color: var(--navy-dark); }
+.bg-primary { background-color: var(--primary) !important; }
+.text-primary { color: var(--primary) !important; }
+.text-success { color: var(--green) !important; }
+
+/* =============================
+   3. Typography & Text Effects
+   ============================= */
+.title {
+  font-size: 32px;
+  color: var(--navy-dark);
+  font-weight: 500;
+}
+
+.sub-title {
+  font-size: 18px; /* Diambil dari nilai yang override di bawah */
+  font-weight: 600;
+}
+
+.paragraph {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--grey);
+  line-height: 30px;
+  margin: 30px 0;
+}
+
+.text-gradient-blue {
+  background: linear-gradient(90deg, var(--grad-blue-start) 0%, var(--grad-blue-end) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-gradient-pink {
+  background: linear-gradient(90deg, var(--grad-pink-start) 0%, var(--grad-pink-end) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* =============================
+   4. Buttons
+   ============================= */
+.main-btn, .btn-green, .btn-navy {
+  padding: 13px 35px;
+  border-radius: 45px;
+  font-size: 16px;
+  border: 0;
+  text-align: center;
+  text-decoration: none;
+  transition: ease-out 0.3s;
+  outline: none;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.btn-navy {
+  background-color: var(--navy-light);
+  font-weight: 500;
+  color: var(--white);
+}
+.btn-navy:hover {
+  color: var(--white);
+  background-color: var(--navy-hover);
+}
+.btn-navy:focus {
+  outline: 2.5px solid rgba(196, 196, 196, 0.75);
+}
+
+.btn-green {
+  color: var(--navy-dark);
+  font-weight: 600;
+  background-color: var(--green);
+  box-shadow: 0px 4px 15px rgba(1, 251, 52, 0.35);
+}
+.btn-green:hover {
+  color: var(--navy-dark);
+  opacity: 0.9;
+}
+.btn-green:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* =============================
+   5. Navbar
+   ============================= */
+.navbar {
+  padding: 20px 0;
+}
+.navbar .navbar-nav .nav-link {
+  color: var(--grey);
+  font-size: 16px;
+  font-weight: 400;
+}
+.navbar .navbar-nav .nav-link.active {
+  color: var(--white);
+  border-bottom: 2px solid var(--green);
+  padding: 0 0 0 0;
+}
+
+@media (min-width: 1000px) {
+  .navbar .navbar-nav .nav-link {
+    margin: 0 30px;
+  }
+}
+
+/* =============================
+   6. Sections (Home & Global)
+   ============================= */
+/* Header */
+.header, .login.header {
+  height: auto;
+  min-height: 100vh;
+}
+.header .hero {
+  padding: 100px 0;
+  text-align: center;
+}
+.header .hero .hero-headline {
+  font-size: 45px;
+  font-weight: 600;
+  color: var(--white);
+  line-height: 70px;
+}
+.header .hero .hero-paragraph {
+  margin: 30px 0;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 30px;
+  color: var(--grey);
+}
+.header .header-image {
+  overflow: hidden;
+}
+.header .header-image .img-1 {
+  width: 662px !important;
+  height: 410px !important;
+}
+.header .header-image .img-2 {
+  width: 838px !important;
+  height: 520px !important;
+}
+
+/* Brand Partner */
+.brand-partner {
+  padding: 100px 0;
+}
+.brand-partner p {
+  font-weight: 500;
+  font-size: 16px;
+  color: var(--grey);
+  margin-bottom: 30px;
+}
+.brand-partner div {
+  column-gap: 70px;
+  row-gap: 35px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+.brand-partner img {
+  height: 30px;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+.brand-partner img:hover {
+  opacity: 1;
+}
+
+/* Grow Today & Cards */
+.grow-today {
+  background-color: var(--bg-light);
+  padding: 100px 0;
+}
+.grow-today .gap {
+  row-gap: 48px;
+}
+.card-grow {
+  position: relative;
+  border-radius: 20px;
+  background-color: var(--navy-light);
+  overflow: hidden;
+  padding: 0;
+}
+.card-grow img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+.card-grow .badge-pricing {
+  position: absolute;
+  z-index: 1;
+  right: 16px; /* Bisa disesuaikan jadi left: 16px jika ingin di kiri seperti deklarasi kedua Anda sebelumnya */
+  top: 16px;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--navy-dark);
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 48px;
+  font-size: 14px;
+}
+.card-grow .card-content {
+  padding: 20px;
+  color: var(--white);
+}
+.card-grow .card-title {
+  font-weight: 600;
+  font-size: 18px;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+.card-grow .card-subtitle {
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--grey);
+  margin-bottom: 8px;
+}
+.card-grow .description {
+  font-weight: 500;
+  font-size: 14px;
+  color: var(--grey);
+}
+.card-grow .stretched-link {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: 1;
+}
+
+/* Stories */
+.stories {
+  padding: 100px 0 70px;
+}
+.stories img {
+  margin-right: 100px;
+}
+.stories .btn-navy {
+  width: max-content;
+}
+
+/* Statistics */
+.statistics {
+  padding: 0 0 100px;
+}
+.statistics p {
+  margin: 0;
+}
+
+/* Dashboard Card */
+.dashboard-card {
+  background-color: var(--navy-light);
+  border-radius: 16px;
+  padding: 24px;
+  color: var(--white);
+}
+.dashboard-card .stat-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+/* =============================
+   7. Forms
+   ============================= */
+.form-login {
+  background-color: var(--white);
+  border-radius: 24px;
+  padding: 24px;
+  row-gap: 20px;
+  width: 100%;
+  max-width: 460px;
+}
+.form-login .form-label {
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--navy-dark);
+  margin-bottom: 8px;
+}
+.form-login input {
+  padding: 13px 16px;
+  border-radius: 14px;
+  border: 1.5px solid var(--navy-dark);
+  background-color: transparent;
+  width: 100%;
+}
+.form-login input:focus {
+  box-shadow: none;
+  border-color: var(--green);
+  outline: none;
+}
+
+.form-control-custom {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 8px !important;
+  padding: 12px 16px !important;
+  font-size: 16px !important;
+  color: var(--white) !important;
+  width: 100%;
+}
+.form-control-custom::placeholder {
+  color: var(--grey) !important;
+}
+.form-control-custom:focus {
+  background-color: rgba(255, 255, 255, 0.15) !important;
+  border-color: var(--green) !important;
+  box-shadow: 0 0 0 0.2rem rgba(1, 251, 52, 0.25) !important;
+  outline: none !important;
+}
+
+/* =============================
+   8. Details Page Styles
+   ============================= */
+.preview-image {
+  overflow-x: hidden;
+}
+.preview-image .img-content {
+  width: 75%;
+}
+
+.details-content {
+  margin-top: -240px;
+}
+.details-content .gap {
+  column-gap: 100px;
+}
+.details-content .description {
+  margin-top: 24px;
+}
+.details-content .description .headline {
+  font-weight: 600;
+}
+.details-content .description .event-details {
+  margin-top: 140px;
+}
+.details-content .description h6,
+.details-content .card-event h6,
+.details-content .card-event .speaker-name,
+.details-content .card-event .price,
+.details-content .card-event .card-details {
+  color: var(--navy-dark);
+}
+.details-content .description .details-paragraph,
+.details-content .description .keypoints {
+  color: var(--navy-light);
+}
+.details-content .description .keypoints {
+  margin-top: 50px;
+}
+.details-content .description .keypoints div {
+  margin-top: 16px;
+}
+.details-content .description .map-location {
+  margin-top: 50px;
+}
+.details-content .description .map-location h6 {
+  margin-bottom: 20px;
+}
+.details-content .description .map-location .map-placeholder {
+  padding: 8px;
+}
+.details-content .description .map-location .map-placeholder .maps {
+  position: relative;
+}
+.details-content .description .map-location .map-placeholder .maps img {
+  border-radius: 18px;
+}
+
+/* PERBAIKAN OVERLAY MAPS */
+.details-content .description .map-location .map-placeholder .maps .absolute {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.details-content .description .map-location .map-placeholder .maps .absolute .btn-navy {
+  padding: 8px 12px !important;
+}
+.details-content .description .map-location .map-placeholder .maps .absolute .btn-navy:hover {
+  box-shadow: 0px 4px 15px rgba(19, 19, 29, 0.35);
+}
+
+.details-content .card-event {
+  padding: 24px;
+}
+.details-content .card-event .occupation,
+.details-content .card-event .price span {
+  color: var(--grey);
+}
+.details-content .card-event hr {
+  margin: 30px 0;
+}
+.details-content .card-event .price span {
+  font-size: 16px;
+}
+.details-content .card-event .btn-green {
+  margin-top: 14px;
+}
+
+/* =============================
+   9. Footer
+   ============================= */
+.footer, footer {
+  padding: 70px 0;
+}
+.footer .footer-content, footer .footer-content {
+  column-gap: 150px;
+  row-gap: 48px;
+  display: flex;
+  flex-wrap: wrap;
+}
+.footer .footer-content .footer-links, footer .footer-content .footer-links {
+  font-size: 16px;
+}
+.footer .footer-content .footer-links .title-links, footer .footer-content .footer-links .title-links {
+  font-weight: 500;
+  color: var(--white);
+  margin-bottom: 16px;
+}
+.footer .footer-content .footer-links a, footer .footer-content .footer-links a {
+  font-weight: 400;
+  color: var(--grey);
+  transition: all 0.3s;
+  text-decoration: none;
+  margin-bottom: 8px;
+  display: block;
+}
+.footer .footer-content .footer-links a:hover, footer .footer-content .footer-links a:hover {
+  color: var(--white);
+  text-decoration: underline;
+}
+.footer .all-rights, footer .all-rights {
+  margin-top: 70px;
+  margin-bottom: 0;
+  text-align: center;
+  color: var(--grey);
+}
+
+/* =============================
+   10. Media Queries
+   ============================= */
+@media (max-width: 1200px) {
+  .preview-image { height: 850px; }
+}
+
+@media (max-width: 992px) {
+  /* Header adjustments */
+  .header .hero .hero-headline {
+    font-size: 32px;
+    line-height: 50px;
+  }
+  .header .header-image .img-1 { width: 301px !important; height: 175px !important; }
+  .header .header-image .img-2 { width: 389px !important; height: 230px !important; }
+
+  /* Sections adjustments */
+  .brand-partner { padding: 100px 0; }
+  .stories img { margin-right: 0; margin-bottom: 30px; }
+  .title { font-size: 24px; }
+  .form-login { max-width: 100%; }
+  
+  /* Details page adjustments */
+  .preview-image { height: 750px; }
+  .preview-image .img-content { width: 70%; }
+  .details-content .card-event { margin: 0 auto; }
+}
+
+@media (max-width: 500px) {
+  /* Details page mobile adjustments */
+  .preview-image { height: 650px; }
+  .preview-image .img-content { width: 90%; }
+  
+  .details-content { margin-top: -280px; }
+  .details-content .description { max-width: 100%; }
+  .details-content .description .map-location { margin-top: 50px; }
+  .details-content .description .map-location h6 { margin-bottom: 20px; }
+  .details-content .description .map-location .map-placeholder { width: 100%; }
+  .details-content .description .map-location .map-placeholder .maps { max-width: 100%; }
+}
+
+.bg-navy {
+  background: #0a1931;
+}
+
+.map-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: 0.3s;
+}
+
+.map-overlay a {
+  opacity: 0;
+  transform: translateY(10px);
+  transition: 0.3s;
+}
+
+.map-overlay.active {
+  background: rgba(0,0,0,0.4);
+}
+
+.map-overlay.active a {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.card {
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+}
