@@ -12,6 +12,7 @@ export default function SignUp() {
     lastName: '',
     email: '',
     password: '',
+    confirmPassword: '',
     role: '',
   });
 
@@ -48,6 +49,10 @@ export default function SignUp() {
 
     if (form.password.length < 6) {
       return 'Password minimal terdiri dari 6 karakter.';
+    }
+
+    if (form.password !== form.confirmPassword) {
+      return 'Password dan konfirmasi password harus sama.';
     }
 
     return '';
@@ -260,6 +265,25 @@ export default function SignUp() {
                   placeholder="Type your password"
                   className="form-control"
                   value={form.password}
+                  onChange={handleChange}
+                  autoComplete="new-password"
+                  minLength={6}
+                  required
+                />
+              </div>
+
+              <div className="d-flex flex-column align-items-start mb-4">
+                <label htmlFor="confirm_password" className="form-label">
+                  Confirm Password
+                </label>
+
+                <input
+                  type="password"
+                  id="confirm_password"
+                  name="confirmPassword"
+                  placeholder="Retype your password"
+                  className="form-control"
+                  value={form.confirmPassword}
                   onChange={handleChange}
                   autoComplete="new-password"
                   minLength={6}

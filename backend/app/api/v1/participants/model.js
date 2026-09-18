@@ -34,6 +34,9 @@ const participantSchema = new mongoose.Schema(
     otp: {
       type: String,
       required: true,
+      minlength: 4,
+      maxlength: 4,
+      match: [/^\d{4}$/, 'OTP harus terdiri dari 4 angka'],
     },
   },
   { timestamps: true }
