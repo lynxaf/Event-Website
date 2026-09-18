@@ -28,6 +28,7 @@ const signupParticipant = async (req) => {
     result.email = email;
     result.password = password;
     result.otp = Math.floor(Math.random() * 9999);
+    //const otp = String(Math.floor(1000 + Math.random() * 9000));
     await result.save();
   } else {
     result = await Participant.create({
@@ -55,7 +56,9 @@ const activateParticipant = async (req) => {
 
   if (!check) throw new NotFoundError('Partisipan belum terdaftar');
 
-  if (check && check.otp !== otp) throw new BadRequestError('Kode otp salah');
+  if (check && String(check.otp) !== String(otp)) {
+    throw new BadRequestError('Kode otp salah');
+  }
 
   const result = await Participant.findByIdAndUpdate(
     check._id,
