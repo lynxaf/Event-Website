@@ -27,8 +27,16 @@ const createOrganizer = async (req) => {
 const createUsers = async (req, res) => {
   const { name, password, role, confirmPassword, email } = req.body;
 
+  if (!confirmPassword) {
+    throw new BadRequestError(
+      'Konfirmasi password wajib diisi'
+    );
+  }
+  
   if (password !== confirmPassword) {
-    throw new BadRequestError('Password dan Konfirmasi password tidak cocok');
+    throw new BadRequestError(
+      'Password dan konfirmasi password tidak cocok'
+    );
   }
 
   const result = await Users.create({

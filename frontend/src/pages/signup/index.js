@@ -16,13 +16,52 @@ export default function SignUp() {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    // Validasi form di sini
+  
     setIsLoading(true);
-    setTimeout(() => {
+    setErrorMessage('');
+    setSuccessMessage('');
+  
+    try {
+      await signup({
+        firstName,
+        lastName,
+        email,
+        password,
+        confirmPassword,
+      });
+  
+      setSuccessMessage(
+        'Registrasi berhasil. Anda akan diarahkan ke halaman login.'
+      );
+  
+      setTimeout(() => {
+        navigate('/login', { replace: true });
+      }, 1200);
+    } catch (error) {
+      console.error('Signup error:', error);
+  
+      let message = 'Registrasi gagal. Silakan coba lagi.';
+  
+      if (error.response) {
+        message =
+          error.response.data?.msg ||
+          error.response.data?.message ||
+          `Server gagal memproses registrasi. Status: ${error.response.status}`;
+      } else if (error.request) {
+        message =
+          'Backend tidak dapat dihubungi. Periksa apakah server backend sedang berjalan dan URL API sudah benar.';
+      } else if (error.message) {
+        message = error.message;
+      }
+  
+      setErrorMessage(message);
+    } finally {
       setIsLoading(false);
-      alert('Registration submitted!');
-    }, 1500);
+    }
   };
 
   return (
