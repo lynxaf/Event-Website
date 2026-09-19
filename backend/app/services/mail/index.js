@@ -1,59 +1,37 @@
-const Users = require('../../api/v1/users/model');
-const Organizers = require('../../api/v1/organizers/model');
-const { BadRequestError } = require('../../errors');
+const nodemailer = require('nodemailer');
+const { gmail, password } = require('../../config');
 
-const createOrganizer = async (req) => {
-  const { organizer, role, email, password, confirmPassword, name } = req.body;
-
-  if (password !== confirmPassword) {
-    throw new BadRequestError('Password dan Konfirmasi password tidak cocok');
+const createTransporter = () => {
+  if (!gmail || !password) {
+    return null;
   }
 
-  const result = await Organizers.create({ organizer });
-
-  const users = await Users.create({
-    email,
-    name,
-    password,
-    organizer: result._id,
-    role,
+  return nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: gmail,
+      pass: password,
+    },
   });
-
-  delete users._doc.password;
-
-  return users;
 };
 
-const createUsers = async (req, res) => {
-  const { name, password, role, confirmPassword, email } = req.body;
-
-  if (!confirmPassword) {
-    throw new BadRequestError(
-      'Konfirmasi password wajib diisi'
-    );
-  }
-  
-  if (password !== confirmPassword) {
-    throw new BadRequestError(
-      'Password dan konfirmasi password tidak cocok'
-    );
+const otpMail = async (email, participant) => {
+  const transporter = createTransporter();
+  if (!transporter) {
+    return;
   }
 
-  const result = await Users.create({
-    name,
-    email,
-    organizer: req.user.organizer,
-    password,
-    role,
+  await transporter.sendMail({
+    from: process.env.MAIL_FROM || gmail,
+    to: email,
+    subject: 'Kode OTP Aktivasi Akun',
+    html: `
+      <h3>Halo ${participant.firstName || ''} ${participant.lastName || ''}</h3>
+      <p>Kode OTP aktivasi akun Anda adalah:</p>
+      <h2>${participant.otp}</h2>
+      <p>Kode hanya berlaku untuk aktivasi akun Anda.</p>
+    `,
   });
-
-  return result;
 };
 
-const getAllUsers = async (req) => {
-  const result = await Users.find();
-
-  return result;
-};
-
-module.exports = { createOrganizer, createUsers, getAllUsers };
+module.exports = { otpMail };

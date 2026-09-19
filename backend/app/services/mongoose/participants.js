@@ -12,12 +12,31 @@ const { createTokenParticipant, createJWT } = require('../../utils');
 
 const { otpMail } = require('../mail');
 
+const generateOtp = () => String(Math.floor(1000 + Math.random() * 9000));
+
+const sanitizeParticipant = (participant) => {
+  const sanitizedParticipant = participant.toObject();
+  delete sanitizedParticipant.password;
+  delete sanitizedParticipant.otp;
+  return sanitizedParticipant;
+};
+
 const signupParticipant = async (req) => {
   const { firstName, lastName, email, password, role } = req.body;
+  const normalizedEmail = email ? email.trim().toLowerCase() : '';
+  const otp = generateOtp();
 
-  // jika email dan status tidak aktif
+  const existingActiveParticipant = await Participant.findOne({
+    email: normalizedEmail,
+    status: 'aktif',
+  });
+
+  if (existingActiveParticipant) {
+    throw new BadRequestError('Email sudah terdaftar dan akun sudah aktif');
+  }
+
   let result = await Participant.findOne({
-    email,
+    email: normalizedEmail,
     status: 'tidak aktif',
   });
 
@@ -25,52 +44,53 @@ const signupParticipant = async (req) => {
     result.firstName = firstName;
     result.lastName = lastName;
     result.role = role;
-    result.email = email;
+    result.email = normalizedEmail;
     result.password = password;
-    result.otp = Math.floor(Math.random() * 9999);
-    //const otp = String(Math.floor(1000 + Math.random() * 9000));
+    result.otp = otp;
     await result.save();
   } else {
     result = await Participant.create({
       firstName,
       lastName,
-      email,
+      email: normalizedEmail,
       password,
       role,
-      otp: Math.floor(Math.random() * 9999),
+      otp,
     });
   }
-  await otpMail(email, result);
+  await otpMail(normalizedEmail, result);
 
-  delete result._doc.password;
-  delete result._doc.otp;
-
-  return result;
+  return sanitizeParticipant(result);
 };
 
 const activateParticipant = async (req) => {
   const { otp, email } = req.body;
+  const normalizedEmail = email ? email.trim().toLowerCase() : '';
+  const normalizedOtp = otp ? otp.toString().trim() : '';
+
+  if (!normalizedEmail || !normalizedOtp) {
+    throw new BadRequestError('Email dan kode OTP wajib diisi');
+  }
+
   const check = await Participant.findOne({
-    email,
+    email: normalizedEmail,
   });
 
   if (!check) throw new NotFoundError('Partisipan belum terdaftar');
 
-  if (check && String(check.otp) !== String(otp)) {
+  if (check.status === 'aktif') {
+    throw new BadRequestError('Akun sudah aktif');
+  }
+
+  if (check.otp !== normalizedOtp) {
     throw new BadRequestError('Kode otp salah');
   }
 
-  const result = await Participant.findByIdAndUpdate(
-    check._id,
-    {
-      status: 'aktif',
-    },
-    { new: true }
-  );
+  check.status = 'aktif';
+  check.otp = generateOtp();
+  await check.save();
 
-  delete result._doc.password;
-
-  return result;
+  return sanitizeParticipant(check);
 };
 
 const signinParticipant = async (req) => {

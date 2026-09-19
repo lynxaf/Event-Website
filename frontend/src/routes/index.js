@@ -4,6 +4,7 @@ import GuestOnlyRoute from '../components/GuestOnlyRoute';
 
 import Login from '../pages/signin';
 import SignUp from '../pages/signup';
+import Activate from '../pages/activate';
 import Home from '../pages/home';
 import { HomeRoute } from './HomeRoute';
 import { TalentsRoute } from './TalentsRoute';
@@ -34,6 +35,14 @@ export function AppRoutes() {
         element={
           <GuestOnlyRoute>
             <SignUp />
+          </GuestOnlyRoute>
+        }
+      />
+      <Route
+        path='/activate'
+        element={
+          <GuestOnlyRoute>
+            <Activate />
           </GuestOnlyRoute>
         }
       />
