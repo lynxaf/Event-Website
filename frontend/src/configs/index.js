@@ -9,5 +9,6 @@ const config = {
 };
 
 config.api_host_dev = `${config.apiUrl}/api/v1`;
+config.api_image = config.apiImage;
 
 export { config };

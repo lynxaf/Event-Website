@@ -14,6 +14,7 @@ import SNavbar from '../components/Navbar';
 import Details from '../pages/details';
 import { EventsRoute } from './EventsRoute';
 import { OrdersRoute } from './OrdersRoute';
+import { UsersRoute } from './UsersRoute';
 import Checkout from '../pages/checkout';
 import ParticipantOrders from '../pages/participant-orders';
 import ParticipantRoute from '../components/ParticipantRoute';
@@ -58,7 +59,7 @@ export function AppRoutes() {
         element={
           <>
             <SNavbar />
-            <GuardRoute>
+            <GuardRoute roles={['organizer', 'admin', 'owner']}>
               <Outlet />
             </GuardRoute>
           </>
@@ -73,7 +74,7 @@ export function AppRoutes() {
         element={
           <>
             <SNavbar />
-            <GuardRoute>
+            <GuardRoute roles={['organizer']}>
               <Outlet />
             </GuardRoute>
           </>
@@ -88,7 +89,7 @@ export function AppRoutes() {
         element={
           <>
             <SNavbar />
-            <GuardRoute>
+            <GuardRoute roles={['organizer']}>
               <Outlet />
             </GuardRoute>
           </>
@@ -103,7 +104,7 @@ export function AppRoutes() {
         element={
           <>
             <SNavbar />
-            <GuardRoute>
+            <GuardRoute roles={['organizer']}>
               <Outlet />
             </GuardRoute>
           </>
@@ -118,7 +119,7 @@ export function AppRoutes() {
         element={
           <>
             <SNavbar />
-            <GuardRoute>
+            <GuardRoute roles={['organizer']}>
               <Outlet />
             </GuardRoute>
           </>
@@ -133,13 +134,27 @@ export function AppRoutes() {
         element={
           <>
             <SNavbar />
-            <GuardRoute>
+            <GuardRoute roles={['organizer', 'admin', 'owner']}>
               <Outlet />
             </GuardRoute>
           </>
         }
       >
         <Route path='' element={<OrdersRoute />} />
+      </Route>
+
+      <Route
+        path='/users'
+        element={
+          <>
+            <SNavbar />
+            <GuardRoute roles={['owner']}>
+              <Outlet />
+            </GuardRoute>
+          </>
+        }
+      >
+        <Route path='' element={<UsersRoute />} />
       </Route>
 
       {/* Fallback to home */}

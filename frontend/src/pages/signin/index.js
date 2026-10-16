@@ -32,7 +32,7 @@ export default function SignIn() {
     setErrorMessage('');
 
     try {
-      const response = await axios.post(`${config.apiUrl}/api/v1/auth/signin`, {
+      const response = await axios.post(`${config.api_host_dev}/cms/signin`, {
         email: form.email.trim().toLowerCase(),
         password: form.password,
       });

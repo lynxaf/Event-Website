@@ -22,7 +22,7 @@ router.post(
 router.post(
   '/users',
   authenticateUser,
-  authorizeRoles('organizer'),
+  authorizeRoles('owner'),
   createCMSUser
 );
 

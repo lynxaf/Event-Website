@@ -37,6 +37,7 @@ function EventsCreate() {
     ],
     category: '',
     talent: '',
+    statusEvent: 'Draft',
   });
 
   const [alert, setAlert] = useState({
@@ -53,12 +54,13 @@ function EventsCreate() {
     setForm({
       ...form,
       title: res.data.data.title,
-      date: moment(res.data.data.date).format('YYYY-MM-DDTHH:SS'),
+      date: moment(res.data.data.date).format('YYYY-MM-DDTHH:mm'),
       file: res.data.data.image._id,
       avatar: res.data.data.image.name,
       about: res.data.data.about,
       venueName: res.data.data.venueName,
       tagline: res.data.data.tagline,
+      statusEvent: res.data.data.statusEvent,
       keyPoint: res.data.data.keyPoint,
       category: {
         label: res?.data?.data?.category?.name,
@@ -153,10 +155,16 @@ function EventsCreate() {
       venueName: form.venueName,
       tagline: form.tagline,
       keyPoint: form.keyPoint,
-      category: form.category.value,
-      talent: form.talent.value,
-      status: form.status,
-      tickets: form.tickets,
+      category: form.category?.value,
+      talent: form.talent?.value,
+      statusEvent: form.statusEvent,
+      tickets: form.tickets.map(({ type, price, stock, status, statusTicketCategories }) => ({
+        type,
+        price: Number(price),
+        stock: Number(stock),
+        statusTicketCategories:
+          statusTicketCategories === undefined ? status !== 'false' : statusTicketCategories,
+      })),
     };
 
     const res = await putData(`/cms/events/${eventId}`, payload);

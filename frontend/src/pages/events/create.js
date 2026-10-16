@@ -123,10 +123,15 @@ function EventsCreate() {
       venueName: form.venueName,
       tagline: form.tagline,
       keyPoint: form.keyPoint,
-      category: form.category.value,
-      talent: form.talent.value,
-      status: form.status,
-      tickets: form.tickets,
+      category: form.category?.value,
+      talent: form.talent?.value,
+      statusEvent: 'Draft',
+      tickets: form.tickets.map(({ type, price, stock, status }) => ({
+        type,
+        price: Number(price),
+        stock: Number(stock),
+        statusTicketCategories: status !== 'false',
+      })),
     };
 
     const res = await postData('/cms/events', payload);

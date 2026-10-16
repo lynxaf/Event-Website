@@ -6,10 +6,10 @@ import {
   accessCategories,
   accessTalents,
   accessEvents,
-  accessParticipant,
   accessPayments,
   accessOrders,
 } from '../../const/access';
+import { accessUsers } from '../../const/accessUsers';
 
 function SNavbar() {
   const navigate = useNavigate();
@@ -80,17 +80,17 @@ function SNavbar() {
           </NavLink>
           <NavLink
             role={role}
-            roles={accessParticipant.lihat}
-            action={() => navigate('/participant')}
-          >
-            Participant
-          </NavLink>
-          <NavLink
-            role={role}
             roles={accessOrders.lihat}
             action={() => navigate('/orders')}
           >
             Orders
+          </NavLink>
+          <NavLink
+            role={role}
+            roles={accessUsers.lihat}
+            action={() => navigate('/users')}
+          >
+            Users
           </NavLink>
         </Nav>
         <Nav className='justify-content-end'>

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router(); // Gunakan express.Router()
 
 // Import controller yang sudah kita buat sebelumnya
-const { signupCms, signinCms } = require('./controller'); // Sesuaikan path filenya
+const { signinCms } = require('./controller');
 
 // Endpoint GET hanya untuk tes
 router.get('/auth', (req, res) => {
@@ -10,10 +10,6 @@ router.get('/auth', (req, res) => {
         message: "Halaman Auth",
     });
 });
-
-// Endpoint POST untuk Registrasi
-// Cukup panggil nama fungsinya, jangan dideklarasikan ulang
-router.post('/signup', signupCms);
 
 // Endpoint POST untuk Signin
 router.post('/signin', signinCms);
