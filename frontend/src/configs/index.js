@@ -8,4 +8,6 @@ const config = {
     'http://localhost:3001').replace(/\/+$/, ''),
 };
 
+config.api_host_dev = `${config.apiUrl}/api/v1`;
+
 export { config };

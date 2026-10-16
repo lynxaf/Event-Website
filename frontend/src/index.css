@@ -24,6 +24,18 @@
   --grad-pink-end: #F5709D;
 }
 
+.event-search {
+  max-width: 360px;
+}
+
+.ticket-quantity {
+  max-width: 90px;
+}
+
+.object-fit-cover {
+  object-fit: cover;
+}
+
 /* =============================
    2. Global Styles
    ============================= */

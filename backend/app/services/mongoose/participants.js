@@ -125,14 +125,15 @@ const getAllEvents = async (req) => {
   const result = await Events.find({ statusEvent: 'Published' })
     .populate('category')
     .populate('image')
-    .select('_id title date tickets venueName');
+    .populate('organizer')
+    .select('_id title date tickets venueName category image organizer');
 
   return result;
 };
 
 const getOneEvent = async (req) => {
   const { id } = req.params;
-  const result = await Events.findOne({ _id: id })
+  const result = await Events.findOne({ _id: id, statusEvent: 'Published' })
     .populate('category')
     .populate({ path: 'talent', populate: 'image' })
     .populate('image');
@@ -143,7 +144,6 @@ const getOneEvent = async (req) => {
 };
 
 const getAllOrders = async (req) => {
-  console.log(req.participant);
   const result = await Orders.find({ participant: req.participant.id });
   return result;
 };
@@ -155,34 +155,59 @@ const getAllOrders = async (req) => {
 const checkoutOrder = async (req) => {
   const { event, personalDetail, payment, tickets } = req.body;
 
-  const checkingEvent = await Events.findOne({ _id: event });
+  if (!event || !payment || !personalDetail || !Array.isArray(tickets) || !tickets.length) {
+    throw new BadRequestError('Data checkout belum lengkap');
+  }
+  if (
+    !personalDetail.firstName ||
+    !personalDetail.lastName ||
+    !personalDetail.email
+  ) {
+    throw new BadRequestError('Data pemesan belum lengkap');
+  }
+
+  const checkingEvent = await Events.findOne({
+    _id: event,
+    statusEvent: 'Published',
+  });
   if (!checkingEvent) {
     throw new NotFoundError('Tidak ada acara dengan id : ' + event);
   }
 
-  const checkingPayment = await Payments.findOne({ _id: payment });
+  const checkingPayment = await Payments.findOne({ _id: payment, status: true });
 
   if (!checkingPayment) {
     throw new NotFoundError(
       'Tidak ada metode pembayaran dengan id :' + payment
     );
   }
+  if (String(checkingPayment.organizer) !== String(checkingEvent.organizer)) {
+    throw new BadRequestError('Metode pembayaran tidak tersedia untuk event ini');
+  }
 
-  let totalPay = 0,
-    totalOrderTicket = 0;
-  await tickets.forEach((tic) => {
-    checkingEvent.tickets.forEach((ticket) => {
-      if (tic.ticketCategories.type === ticket.type) {
-        if (tic.sumTicket > ticket.stock) {
-          throw new NotFoundError('Stock event tidak mencukupi');
-        } else {
-          ticket.stock -= tic.sumTicket;
+  let totalPay = 0;
+  let totalOrderTicket = 0;
+  const selectedTypes = new Set();
+  tickets.forEach((tic) => {
+    const quantity = Number(tic.sumTicket);
+    const ticket = checkingEvent.tickets.find(
+      (availableTicket) =>
+        availableTicket.type === tic.ticketCategories?.type
+    );
+    if (!ticket || selectedTypes.has(ticket.type)) {
+      throw new BadRequestError('Kategori tiket tidak valid');
+    }
+    if (!Number.isInteger(quantity) || quantity < 1) {
+      throw new BadRequestError('Jumlah tiket tidak valid');
+    }
+    if (ticket.statusTicketCategories === false || quantity > ticket.stock) {
+      throw new BadRequestError('Stock event tidak mencukupi');
+    }
 
-          totalOrderTicket += tic.sumTicket;
-          totalPay += tic.ticketCategories.price * tic.sumTicket;
-        }
-      }
-    });
+    selectedTypes.add(ticket.type);
+    ticket.stock -= quantity;
+    totalOrderTicket += quantity;
+    totalPay += ticket.price * quantity;
   });
 
   await checkingEvent.save();

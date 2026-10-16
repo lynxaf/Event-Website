@@ -14,13 +14,16 @@ import SNavbar from '../components/Navbar';
 import Details from '../pages/details';
 import { EventsRoute } from './EventsRoute';
 import { OrdersRoute } from './OrdersRoute';
+import Checkout from '../pages/checkout';
+import ParticipantOrders from '../pages/participant-orders';
+import ParticipantRoute from '../components/ParticipantRoute';
 
 export function AppRoutes() {
   return (
     <Routes>
       {/* Public Routes */}
       <Route path='/' element={<Home />} />
-      <Route path='/details' element={<Details />} />
+      <Route path='/details/:id' element={<Details />} />
       <Route index element={<Home />} />
       <Route
         path='/login'
@@ -46,6 +49,8 @@ export function AppRoutes() {
           </GuestOnlyRoute>
         }
       />
+      <Route path='/checkout/:id' element={<ParticipantRoute><Checkout /></ParticipantRoute>} />
+      <Route path='/participant/orders' element={<ParticipantRoute><ParticipantOrders /></ParticipantRoute>} />
 
       {/* Protected Dashboard Routes */}
       <Route

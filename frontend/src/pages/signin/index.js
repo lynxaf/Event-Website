@@ -65,9 +65,9 @@ export default function SignIn() {
           <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div className="navbar-nav ms-auto my-3 my-lg-0">
               <Link to="/" className="nav-link">Home</Link>
-              <a className="nav-link" href="#">Browse</a>
-              <a className="nav-link" href="#">Stories</a>
-              <a className="nav-link" href="#">About</a>
+              <Link className="nav-link" to="/#grow-today">Browse</Link>
+              <Link className="nav-link" to="/#story">Stories</Link>
+              <Link className="nav-link" to="/#about">About</Link>
             </div>
           </div>
         </div>
