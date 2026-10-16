@@ -3,9 +3,11 @@ import { useSelector } from 'react-redux';
 import { Navigate, Outlet } from 'react-router-dom';
 
 export default function GuestOnlyRoute({ children }) {
-  let { token } = useSelector((state) => state.auth);
+  const { token, role } = useSelector((state) => state.auth);
 
-  if (token) return <Navigate to='/' replace={true} />;
+  // Participant sessions do not have a CMS role and must still be able to
+  // open the CMS sign-in page.
+  if (token && role) return <Navigate to='/dashboard' replace={true} />;
 
   return children || <Outlet />;
 }
