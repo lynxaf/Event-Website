@@ -1,25 +1,54 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import axios from 'axios';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Container } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
+import { userLogin } from '../../redux/auth/actions';
+import { config } from '../../configs';
 
 export default function SignIn() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const dispatch = useDispatch();
   const [form, setForm] = useState({
     email: '',
     password: ''
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    setErrorMessage('');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!form.email.trim() || !form.password) {
+      setErrorMessage('Email dan password wajib diisi.');
+      return;
+    }
     setIsLoading(true);
-    setTimeout(() => {
+    setErrorMessage('');
+
+    try {
+      const response = await axios.post(`${config.apiUrl}/api/v1/auth/signin`, {
+        email: form.email.trim().toLowerCase(),
+        password: form.password,
+      });
+      const { token, role, refreshToken } = response.data.data;
+      dispatch(userLogin(token, role, refreshToken));
+      const destination = location.state?.from || (role ? '/dashboard' : '/');
+      navigate(destination, { replace: true });
+    } catch (error) {
+      setErrorMessage(
+        error.response?.data?.message ||
+          error.response?.data?.msg ||
+          'Login gagal. Periksa email dan password Anda.'
+      );
+    } finally {
       setIsLoading(false);
-      alert('Login submitted!');
-    }, 1500);
+    }
   };
 
   return (
@@ -53,6 +82,7 @@ export default function SignIn() {
             </div>
           </div>
           <form className="form-login d-flex flex-column mt-4 mt-md-0" onSubmit={handleSubmit}>
+            {errorMessage && <div className="alert alert-danger" role="alert">{errorMessage}</div>}
             <div className="d-flex flex-column align-items-start mb-3">
               <label htmlFor="email_address" className="form-label">
                 Email Address
